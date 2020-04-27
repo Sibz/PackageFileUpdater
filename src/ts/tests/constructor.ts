@@ -15,8 +15,3 @@ test('When arg is invalid path, should throw', t=> {
 test('When arg is valid path, should not throw', t=> {
     t.notThrows(()=>new PackageFileUpdater(TEST_FILE));
 });
-
-test.skip('When arg is valid path, load file', t=> {
-    let pfu = new PackageFileUpdater(TEST_FILE);
-    t.truthy(pfu.jsonObj);
-});
