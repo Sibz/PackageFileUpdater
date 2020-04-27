@@ -6,11 +6,13 @@ export const ERR_FILE_NOT_FOUND = "File not found";
 export const ERR_PATH_NOT_SET = "Path not set, either set in constructor or pass to load(path)";
 export const ERR_FILE_NOT_VALID = "File is not a valid package.json";
 export const ERR_FILE_NOT_JSON = "File is not valid json";
+export const ERR_NOT_LOADED = "Can not save until a file is loaded";
 export class PackageFileUpdater {
 
     jsonObj: any;
     semVer: SemVer;
     private path: string | null;
+    private loaded: boolean = false;
 
     constructor(path: string | null = null) {
         this.semVer = new SemVer();
@@ -42,10 +44,15 @@ export class PackageFileUpdater {
             throw new Error(ERR_FILE_NOT_VALID);
         }
         this.semVer = new SemVer(this.jsonObj.version);
+        this.loaded = true;
     }
 
-    save() {
-
+    async save() {        
+        if (!this.loaded) {
+            throw new Error(ERR_NOT_LOADED);
+        }
+        this.jsonObj.version = this.semVer.toString();
+        await fsPromises.writeFile(this.path as string, JSON.stringify(this.jsonObj,null,2));
     }
 }
 
