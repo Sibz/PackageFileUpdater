@@ -35,9 +35,6 @@
     "require": [
       "ts-node/register"
     ],
-    "files": [
-      "!./src/js/tests"
-    ],
     "ignoredByWatcher": [
       "./testPackage.json"
     ]

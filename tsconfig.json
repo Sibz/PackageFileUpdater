@@ -1,4 +1,6 @@
 {
+  "include" : ["./src/ts/**/*.ts"],
+  "exclude" : ["./src/ts/tests/**/*.ts"],
   "compilerOptions": {
     /* Basic Options */
     // "incremental": true,                   /* Enable incremental compilation */
