@@ -25,7 +25,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@sibz/semver": "0.0.1-alpha.3",
+    "@sibz/semver": "0.0.1-alpha.6",
     "minimist": "^1.2.5"
   },
   "ava": {
