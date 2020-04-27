@@ -6,9 +6,8 @@ export const ERR_FILE_NOT_FOUND = "File not found";
 export const ERR_PATH_NOT_SET = "Path not set, either set in constructor or pass to load(path)";
 export const ERR_FILE_NOT_VALID = "File is not a valid package.json";
 export const ERR_FILE_NOT_JSON = "File is not valid json";
-export const ERR_NOT_LOADED = "Can not save until a file is loaded";
+export const ERR_NOT_LOADED = "Operation not permitted when file is not loaded";
 export class PackageFileUpdater {
-
     jsonObj: any;
     semVer: SemVer;
     private path: string | null;
@@ -47,12 +46,26 @@ export class PackageFileUpdater {
         this.loaded = true;
     }
 
-    async save() {        
+    async save() {
         if (!this.loaded) {
             throw new Error(ERR_NOT_LOADED);
         }
         this.jsonObj.version = this.semVer.toString();
-        await fsPromises.writeFile(this.path as string, JSON.stringify(this.jsonObj,null,2));
+        await fsPromises.writeFile(this.path as string, JSON.stringify(this.jsonObj, null, 2));
+    }
+
+    addOrUpdateDependency(name: string, ver: SemVer | string) {
+        if (!this.loaded) {
+            throw new Error(ERR_NOT_LOADED);
+        }
+        if (!this.jsonObj.dependencies) {
+            this.jsonObj.dependencies = {};
+        }
+        if (!Object.getOwnPropertyNames(this.jsonObj.dependencies).includes(name)) {
+            Object.defineProperty(this.jsonObj.dependencies, name, { value: ver.toString() });
+        } else {
+            this.jsonObj.dependencies[name] = ver.toString();
+        }
     }
 }
 
